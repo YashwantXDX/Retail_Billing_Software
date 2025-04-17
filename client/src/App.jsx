@@ -1,8 +1,11 @@
 import React from 'react'
+import Menubar from './components/Menubar/Menubar'
 
 const App = () => {
   return (
-    <div>Hello Duniya</div>
+    <div>
+      <Menubar />
+    </div>
   )
 }
 
