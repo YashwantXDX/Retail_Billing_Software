@@ -1,14 +1,16 @@
 import React from 'react';
 import './ManageUsers.css'
+import UserForm from '../../components/UserForm/UserForm';
+import UsersList from '../../components/UsersList/UsersList';
 
 const ManageUsers = () => {
   return (
     <div className="users-container text-light">
       <div className="left-column">
-        Users Form
+        <UserForm/>
       </div>
       <div className="right-column">
-        list of Users
+        <UsersList />
       </div>
     </div>
   )
