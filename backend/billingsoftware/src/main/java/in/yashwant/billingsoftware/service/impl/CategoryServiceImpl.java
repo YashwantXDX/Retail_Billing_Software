@@ -5,6 +5,7 @@ import in.yashwant.billingsoftware.entity.CategoryEntity;
 import in.yashwant.billingsoftware.io.CategoryRequest;
 import in.yashwant.billingsoftware.io.CategoryResponse;
 import in.yashwant.billingsoftware.repository.CategoryRepository;
+import in.yashwant.billingsoftware.repository.ItemRepository;
 import in.yashwant.billingsoftware.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final ItemRepository itemRepository;
 
     @Override
     public CategoryResponse add(CategoryRequest request, MultipartFile file) throws IOException {
@@ -65,6 +67,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     private CategoryResponse convertToResponse(CategoryEntity newCategory) {
 
+        Integer itemsCount = itemRepository.countByCategoryId(newCategory.getId());
+
         return CategoryResponse.builder()
                 .categoryId((newCategory.getCategoryId()))
                 .name(newCategory.getName())
@@ -73,6 +77,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .imgUrl(newCategory.getImgUrl())
                 .createdAt(newCategory.getCreatedAt())
                 .updatedAt(newCategory.getUpdatedAt())
+                .items(itemsCount)
                 .build();
 
     }
