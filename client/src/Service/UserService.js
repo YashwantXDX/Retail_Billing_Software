@@ -8,6 +8,6 @@ export const deleteUser = async (id) => {
     return await axios.delete(`http://localhost:8080/api/v1.0/admin/users/${id}`, {headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}});
 }
 
-export const fetchUser = async () => {
-    return await axios.delete('http://localhost:8080/api/v1.0/admin/users', {headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}});
+export const fetchUsers = async () => {
+    return await axios.get('http://localhost:8080/api/v1.0/admin/users', {headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}});
 }
