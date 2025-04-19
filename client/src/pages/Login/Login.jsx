@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import "./Login.css";
 import toast from "react-hot-toast";
+import { login } from "../../Service/AuthService";
+import {useNavigate} from 'react-router-dom';
+import {AppContext} from "../../context/AppContext.jsx"
 
 const Login = () => {
+
+  const {setAuthData} = useContext(AppContext);
+  const navigate = useNavigate();
+
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     email: "",
@@ -23,10 +30,20 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     try{
+      const response = await login(data);
+
+      if(response.status === 200){
+        toast.success("Login successful");
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("role", response.data.role);
+        setAuthData(response.data.token, response.data.role);
+        navigate("/dashboard");
+      }
 
     }
     catch(error){
-        toast.error('Email or Password invalid');
+      console.log(error);
+      toast.error('Email or Password invalid');
     }
     finally{
         setLoading(false);
@@ -74,7 +91,7 @@ const Login = () => {
                 />
               </div>
               <div className="d-grid">
-                <button type="submit" className="btn btn-dark btn-lg">Sign in</button>
+                <button type="submit" className="btn btn-dark btn-lg" disabled={loading}>{loading ? "Loading..." : "Login"}</button>
               </div>
             </form>
           </div>
