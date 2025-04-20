@@ -64,8 +64,7 @@ const Menubar = () => {
           <li className="nav-item dropdown">
             <a
               href="#"
-              c
-              lassName="nav-link dropdown-toggle"
+              className="nav-link dropdown-toggle"
               id="navbarDropdown"
               role="button"
               data-bs-toggle="dropdown"
@@ -81,12 +80,16 @@ const Menubar = () => {
                 <a href="#" className="dropdown-item">
                   Settings
                 </a>
+                </li>
+                <li>
                 <a href="#" className="dropdown-item">
                   Activity Log
                 </a>
+                </li>
                 <li>
                   <hr className="dropdown-divider" />
                 </li>
+                <li>
                 <a href="#" className="dropdown-item" onClick={logout}>
                   Logout
                 </a>
