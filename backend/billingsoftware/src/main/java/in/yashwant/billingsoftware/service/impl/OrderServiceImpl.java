@@ -2,10 +2,7 @@ package in.yashwant.billingsoftware.service.impl;
 
 import in.yashwant.billingsoftware.entity.OrderEntity;
 import in.yashwant.billingsoftware.entity.OrderItemEntity;
-import in.yashwant.billingsoftware.io.OrderRequest;
-import in.yashwant.billingsoftware.io.OrderResponse;
-import in.yashwant.billingsoftware.io.PaymentDetails;
-import in.yashwant.billingsoftware.io.PaymentMethod;
+import in.yashwant.billingsoftware.io.*;
 import in.yashwant.billingsoftware.repository.OrderEntityRepository;
 import in.yashwant.billingsoftware.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -100,5 +97,31 @@ public class OrderServiceImpl implements OrderService {
                 .stream()
                 .map(this::convertToResponse)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public OrderResponse verifyPayment(PaymentVerificationRequest request) {
+            OrderEntity existingOrder = orderEntityRepository.findByOrderId(request.getOrderId())
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+            if(!verifyRazorpaySignature(request.getRazorpayOrderId(), request.getRazorpayPaymentId(), request.getRazorpaySignature())){
+                throw new RuntimeException("Payment verification failed");
+            }
+
+            PaymentDetails paymentDetails = existingOrder.getPaymentDetails();
+            paymentDetails.setRazorpayOrderId(request.getRazorpayOrderId());
+            paymentDetails.setRazorpayPaymentId(request.getRazorpayPaymentId());
+            paymentDetails.setRazorpaySignature(request.getRazorpaySignature());
+            paymentDetails.setStatus(PaymentDetails.PaymentStatus.COMPLETED);
+
+            existingOrder = orderEntityRepository.save(existingOrder);
+
+            return convertToResponse(existingOrder);
+    }
+
+    private boolean verifyRazorpaySignature(String razorpayOrderId, String razorpayPaymentId, String razorpaySignature) {
+        // In Production Grade, this method should be implemented
+        // For just project this is done here, OKAY
+        return true;
     }
 }
