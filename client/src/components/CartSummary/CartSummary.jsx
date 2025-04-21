@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import { useState } from 'react';
 import { createRazorpayOrder, verifyPayment } from '../../Service/PaymentService';
 import { AppConstants } from '../../util/constants';
+import ReceiptPopup from '../../components/ReceiptPopup/ReceiptPopup.jsx'
 
 const CartSummary = ({customerName, mobileNumber, setMobileNumber, setCustomerName}) => {
 
@@ -105,7 +106,7 @@ const CartSummary = ({customerName, mobileNumber, setMobileNumber, setCustomerNa
           key: AppConstants.RAZORPAY_KEY_ID,
           amount: razorpayResponse.data.amount,
           currency: razorpayResponse.data.currency,
-          orderId: razorpayResponse.data.id,
+          order_id: razorpayResponse.data.id,
           name: "My Retail Shop",
           description: "Order Payment",
           handler: async function (response) {
@@ -164,9 +165,10 @@ const CartSummary = ({customerName, mobileNumber, setMobileNumber, setCustomerNa
           paymentDetails: {
             razorpayOrderId: response.razorpay_order_id,
             razorpayPaymentId: response.razorpay_payment_id,
-            razorpaySignature: response.razorpaySignature
+            razorpaySignature: response.razorpay_signature
           },
         });
+        
       }
       else{
         toast.error("Payment Processing Failed");
@@ -210,6 +212,19 @@ const CartSummary = ({customerName, mobileNumber, setMobileNumber, setCustomerNa
         disabled={isProcessing || !orderDetails}
         >Place Order</button>
       </div>
+      {        
+        showPopup && (
+          <ReceiptPopup 
+            orderDetails={{
+              ...orderDetails,
+              razorpayOrderId: orderDetails.paymentDetails?.razorpayOrderId,
+              razorpayPaymentId: orderDetails.paymentDetails?.razorpayPaymentId,
+            }}
+            onClose={() => setShowPopup(false)}
+            onPrint={handlePrintReceipt}
+          />
+        )
+      }
     </div>
   )
 }
