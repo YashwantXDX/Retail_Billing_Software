@@ -10,6 +10,7 @@ import {Toaster} from 'react-hot-toast'
 import Login from './pages/Login/Login.jsx';
 import OrderHistory from './pages/OrderHistory/OrderHistory.jsx';
 import { AppContext } from './context/AppContext.jsx';
+import NotFound from './pages/NotFound/NotFound.jsx';
 
 const App = () => {
 
@@ -37,7 +38,7 @@ const App = () => {
 
   return (
     <div>
-      {location.pathname !== "/login" && <Menubar/> }
+      {!['/login', '/404'].includes(location.pathname) && <Menubar />}
       <Toaster />
       <Routes>
           <Route path="/dashboard" element={<Dashboard />} />
@@ -50,6 +51,8 @@ const App = () => {
           <Route path="/login" element={<LoginRoute element={<Login /> }/>} />
           <Route path="/orders" element={<OrderHistory />} />
           <Route path="/" element={<Dashboard />} />
+          <Route path="/404" element={<NotFound />} />
+          <Route path="*" element={<Navigate to="/404" />} />
           
       </Routes>
     </div>
