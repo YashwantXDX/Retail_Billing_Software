@@ -7,7 +7,7 @@ import {AppContext} from '../../context/AppContext.jsx'
 const Menubar = () => {
 
     const navigate = useNavigate();
-    const {setAuthData} = useContext(AppContext);
+    const {setAuthData, auth} = useContext(AppContext);
 
     const location = useLocation();
 
@@ -21,6 +21,8 @@ const Menubar = () => {
     const isActive = (path) => {
       return location.pathname === path;
     }
+
+    const isAdmin = auth.role === "ROLE_ADMIN";
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-2">
@@ -50,7 +52,10 @@ const Menubar = () => {
               Explore
             </Link>
           </li>
-          <li className="nav-item">
+          {
+            isAdmin && (
+              <>
+                <li className="nav-item">
             <Link className={`nav-link ${isActive('/items') ? 'fw-bold text-warning' : ''}`} to="/items">
               Manage Items
             </Link>
@@ -65,6 +70,9 @@ const Menubar = () => {
               Manage Users
             </Link>
           </li>
+              </>
+            )
+          }
           <li className="nav-item">
             <Link className={`nav-link ${isActive('/orders') ? 'fw-bold text-warning' : ''}`} to="/orders">
               Order History
