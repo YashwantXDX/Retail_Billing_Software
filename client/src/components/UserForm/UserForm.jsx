@@ -64,6 +64,7 @@ const UserForm = ({ setUsers }) => {
                   placeholder="Enter Name"
                   onChange={onChangeHandler}
                   value={data.name}
+                  required
                 />
               </div>
               <div className="mb-3">
@@ -78,6 +79,7 @@ const UserForm = ({ setUsers }) => {
                   placeholder="Enter Email"
                   onChange={onChangeHandler}
                   value={data.email}
+                  required
                 />
               </div>
               <div className="mb-3">
@@ -92,6 +94,7 @@ const UserForm = ({ setUsers }) => {
                   placeholder="Enter Password"
                   onChange={onChangeHandler}
                   value={data.password}
+                  required
                 />
               </div>
               <button type="submit" 
