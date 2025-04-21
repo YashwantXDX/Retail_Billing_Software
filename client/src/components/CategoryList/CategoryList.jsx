@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { AppContext } from "../../context/AppContext.jsx";
 import "./CategoryList.css";
 import { useState } from "react";
-import { deleteCategory } from "../../Service/CategoryService.js";
+import { deleteCategory, fetchCategory } from "../../Service/CategoryService.js";
 import toast from "react-hot-toast";
 
 const CategoryList = () => {
@@ -18,9 +18,9 @@ const CategoryList = () => {
       const response = await deleteCategory(categoryId);
       if(response.status === 204){
 
-          const updatedCategories = categories.filter(category => category.categoryId !== categoryId);
-
-          setCategories(updatedCategories);
+          const res = await fetchCategory();
+          
+          setCategories(res.data);
 
           toast.success("Category Deleted");
 

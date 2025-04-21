@@ -1,26 +1,39 @@
 import React, { useContext, useState } from 'react'
 import { AppContext } from '../../context/AppContext';
 import { deleteItem } from '../../Service/ItemService';
+import { fetchCategory } from '../../Service/CategoryService';
 import toast from 'react-hot-toast';
 import './ItemList.css';
 
 const ItemList = () => {
 
-  const {itemsData, setItemsData} = useContext(AppContext);
+  const {itemsData, setItemsData, setCategories, categories} = useContext(AppContext);
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredItems = itemsData.filter((item) => {
     return item.name.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
-  const removeItem = async (itemId) => {
+  const removeItem = async (itemId, categoryId) => {
     try {
       const response = await deleteItem(itemId);
 
       if(response.status === 204){
         const updatedItems = itemsData.filter(item => item.itemId !== itemId);
-
         setItemsData(updatedItems);
+
+        const updatedCategories = categories.map(category => {
+          if (category.categoryId === categoryId) {
+            return {
+              ...category,
+              items: category.items - 1, // Decrease item count
+            };
+          }
+          return category;
+        });
+
+        setCategories(updatedCategories);
+
         toast.success("Item deleted ");
       }
       else{
@@ -73,7 +86,7 @@ const ItemList = () => {
                     </span>
                   </div>
                   <div>
-                    <button className="btn btn-danger btn-sm" onClick={() => removeItem(item.itemId)}>
+                    <button className="btn btn-danger btn-sm" onClick={() => removeItem(item.itemId, item.categoryId)}>
                       <i className="bi bi-trash"></i>
                     </button>
                   </div>
