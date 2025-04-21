@@ -1,5 +1,6 @@
 import React from 'react'
 import './ReceiptPopup.css'
+import './Print.css'
 
 const ReceiptPopup = ({orderDetails, onClose, onPrint}) => {
   return (
@@ -21,12 +22,13 @@ const ReceiptPopup = ({orderDetails, onClose, onPrint}) => {
         <hr className="my-3" />
         <h5 className="mb-3">Items Ordered</h5>
         <div className="cart-items-scrollable">
-          {orderDetails.items.map((item, index) => {
+          {orderDetails.items.map((item, index) => (
             <div key={index} className="d-flex justify-content-between mb-2">
               <span>{item.name} x {item.quantity}</span>
               <span>&#8377; {(item.price * item.quantity).toFixed(2)}</span>
             </div>
-          })}
+          )
+          )}
         </div>
         <hr className="my-3" />
         <div className="d-flex justify-content-between mb-2">
